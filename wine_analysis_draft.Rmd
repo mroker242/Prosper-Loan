@@ -1,0 +1,105 @@
+---
+title: 'Wine Analysis draft '
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+
+
+```{r}
+loandata <- read.csv('prosperLoanData.csv')
+
+#print loan data
+str(loandata)
+ggsave('name.png')
+```
+
+```{r}
+#Below shows the distribution of the debt to income ratio of the dataset.
+
+ggplot(data = loandata, aes(DebtToIncomeRatio)) +
+  geom_histogram(binwidth = 0.02, color = 'black', fill = '#099DD9') +
+  scale_x_continuous(breaks = seq(0,1.2,.1), limits = c(0,1.2)) +
+  ggtitle('Distribution of Debt To Income Ratio') +
+  ylab('# of persons')
+```
+
+As shown above, the majority of persons in this population are at about 0.18. This plot is right tailed and as the ratio goes higher gradually there are less persons with this debt to income ratio. The lower this score the better, and it is evident that the population for the majority has a 'good' score.
+
+## Does Income Range have anything to do with Debt to Income Ratio?
+
+
+```{r}
+ggplot(data = loandata, aes(DebtToIncomeRatio, colour = IncomeRange)) +
+  geom_freqpoly(na.rm = TRUE) +
+  scale_x_continuous(breaks = seq(0,1,.1), limits = c(0,1)) +
+  ggtitle('Distribution of Debt To Income Ratio') +
+  ylab('# of persons')
+```
+Looking at the population, we can see that most income ranges peak at about 0.2. 25,000 - 49,000, 50,000 - 74,000, 75,000 - 99,000, 1 - 24,999 all show similar traits. However, the only difference is that the 100,000+ range seems to have a peak at 0.1 which can indicate that most persons in this group have pretty good scores when it comes to Debt To Income Ratio.
+
+
+
+```{r}
+# with all things being equal, I will need to look at the income range for the population compared ot the debt to income ratio. However, if the number of persons is not equally distributed, this information would not be correct. i would need to find the averages for each one and plot that.
+
+
+```
+
+
+## Is there any correlation between a person's occupation and how much he is in debt?
+
+
+```{r}
+library(dplyr)
+ggplot(data = subset(loandata, LoanStatus == "Past Due (16-30 days)" |
+                       LoanStatus == "Past Due (>120)" |
+                       LoanStatus == "Past Due (1-15 days)" |
+                       LoanStatus == "Past Due (91-120 days)" |
+                       LoanStatus == "Past Due (61-90 days)"),
+       aes(LoanStatus)) +
+  geom_histogram(stat = 'count')
+
+```
+Here we can see that for the loan status the majority of the status here is 1 - 15 days.
+
+
+## Amount Delinquent
+
+```{r}
+ggplot(data = loandata, aes(AmountDelinquent)) +
+  geom_histogram(color = 'orange') +
+  scale_x_continuous(limits = c(0,50000)) +
+  scale_y_continuous(limits = c(0,3500))
+```
+
+
+
+```{r}
+#income range vs delinquent amount
+
+ggplot(data = loandata, aes(x = IncomeRange, y = AmountDelinquent, color = Occupation)) +
+  geom_jitter(alpha = 1/10, color = 'blue') +
+  scale_y_continuous(limits = c(0,150000))
+```
+Do people who have higher incomes owe more? Do persons with higher incomes generally owe less because they can afford to?
+
+
+```{r}
+#here is the data for places where persons live vs being in dept. Next i should look at the proportion
+ggplot(data = loandata, aes(x = BorrowerState, y = AmountDelinquent)) +
+  geom_jitter(size = .5) +
+  scale_y_continuous(limits = c(0,100000))
+```
+As we can see above California and Florida are owing some serious money when it comes to loans
+
+
+## What are some of the main reasons for a loan?
+
+```{r}
+ggplot(data = loandata, aes(ListingCategory..numeric.)) +
+  geom_histogram(binwidth = 1, color = 'black', fill = 'purple') +
+  scale_x_continuous(breaks = seq(0,20,1))
+```
+
