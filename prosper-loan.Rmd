@@ -1,7 +1,7 @@
 ---
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 Prosper Loan by Michael Roker
 ========================================================
@@ -33,8 +33,8 @@ loandata <- read.csv('prosperLoanData.csv')
 
 
 
- This is an exploration of a dataset which approximately 113,937 records of personal loans taken from 
-Prosper, a loan institution.
+ This is an exploration of a dataset which approximately 113,937 records of 
+ personal loans taken from Prosper, a loan institution.
 
 # Univariate Plots Section
 
@@ -61,21 +61,24 @@ summary(loandata$DebtToIncomeRatio)
 
 
 # plot whole distribution
-p1 = ggplot(data = subset(loandata, !is.na(DebtToIncomeRatio)), aes(DebtToIncomeRatio)) +
-    geom_histogram(binwidth = 0.1, color = 'black', fill = '#099DD9') +
-    ggtitle('Distribution of Debt To Income Ratio') +
-    ylab('# of persons') +
-    scale_y_log10()
+p1 = ggplot(data = subset(loandata, !is.na(DebtToIncomeRatio)), 
+            aes(DebtToIncomeRatio)) +
+  geom_histogram(binwidth = 0.1, color = 'black', fill = '#099DD9') +
+  ggtitle('Distribution of Debt To Income Ratio') +
+  ylab('# of persons') +
+  scale_y_log10()
 
 # scale from 0 to 1.2
-p2 = ggplot(data = subset(loandata, !is.na(DebtToIncomeRatio)), aes(DebtToIncomeRatio)) +
+p2 = ggplot(data = subset(loandata, !is.na(DebtToIncomeRatio)), 
+            aes(DebtToIncomeRatio)) +
     geom_histogram(binwidth = 0.02, color = 'black', fill = '#099DD9') +
     scale_x_continuous(breaks = seq(0,1.2,.1), limits = c(0,1.2)) +
     ggtitle('Distribution of Debt To Income Ratio') +
     ylab('# of persons')
 
 # scale from 0.7 to 10.1
-p3 = ggplot(data = subset(loandata, !is.na(DebtToIncomeRatio)), aes(DebtToIncomeRatio)) +
+p3 = ggplot(data = subset(loandata, !is.na(DebtToIncomeRatio)), 
+            aes(DebtToIncomeRatio)) +
     geom_histogram(binwidth = 0.1, color = 'black', fill = '#099DD9') +
     scale_x_continuous(breaks = seq(0.7,10.1,.5), limits = c(0.7,10.1)) +
     scale_y_continuous(breaks = seq(0,350,50), limits = c(0,350)) +
@@ -100,12 +103,14 @@ summary(loandata$LoanStatus)
 
 # plot two plots in grid for loan status
 p1_loanstatus = ggplot(data = loandata, aes(LoanStatus)) +
-  geom_histogram(stat = 'count')
+  geom_histogram(stat = 'count') +
+  coord_flip()
 
 # scale this plot log10
 p2_loanstatus = ggplot(data = loandata, aes(LoanStatus)) +
   geom_histogram(stat = 'count') +
-  scale_y_log10()
+  scale_y_log10() +
+  coord_flip()
 
 grid.arrange(p1_loanstatus,p2_loanstatus)
 
@@ -116,7 +121,8 @@ ggplot(data = subset(loandata, LoanStatus == "Past Due (16-30 days)" |
                        LoanStatus == "Past Due (91-120 days)" |
                        LoanStatus == "Past Due (61-90 days)"),
        aes(LoanStatus)) +
-  geom_histogram(stat = 'count')
+  geom_histogram(stat = 'count') +
+  coord_flip()
 
 ```
 
@@ -132,23 +138,28 @@ see how they compare with each other.
 summary(loandata$AmountDelinquent)
 
 # show whole population
-p1_amountdelinquent = ggplot(data = subset(loandata, !is.na(AmountDelinquent)), aes(AmountDelinquent)) +
-    geom_histogram(color = 'orange') 
-    #scale_x_continuous(limits = c(0,463881)) +
-    #scale_y_continuous(limits = c(0,3500))
+p1_amountdelinquent = ggplot(data = subset(loandata, !is.na(AmountDelinquent)),
+                             aes(AmountDelinquent)) +
+    geom_histogram(color = 'orange') +
+  xlab('Amount Delinquent (USD)')
+
 
 # show scale log 10
-p2_amountdelinquent = ggplot(data = subset(loandata, !is.na(AmountDelinquent)), aes(AmountDelinquent)) +
+p2_amountdelinquent = ggplot(data = subset(loandata, !is.na(AmountDelinquent)),
+                             aes(AmountDelinquent)) +
     geom_histogram(color = 'orange') +
     scale_x_continuous(limits = c(0,463881)) +
     scale_y_continuous(limits = c(0,3500)) +
-    scale_y_log10()
+    scale_y_log10()+
+  xlab('Amount Delinquent (USD)')
 
 # scale for those over 1
-p3_amountdelinquent = ggplot(data = subset(loandata, !is.na(AmountDelinquent)), aes(AmountDelinquent)) +
+p3_amountdelinquent = ggplot(data = subset(loandata, !is.na(AmountDelinquent)),
+                             aes(AmountDelinquent)) +
     geom_histogram(color = 'orange') +
     scale_x_continuous(limits = c(1,30000)) +
-    scale_y_continuous(limits = c(0,1500))
+    scale_y_continuous(limits = c(0,1500)) +
+  xlab('Amount Delinquent (USD)')
 
 grid.arrange(p1_amountdelinquent,p2_amountdelinquent, p3_amountdelinquent)
 
@@ -171,15 +182,20 @@ summary(loandata$IncomeRange)
 
 # plot all of the income ranges
 ggplot(data = loandata, aes(IncomeRange)) +
-  geom_bar(stat = 'count')
+  geom_bar(stat = 'count') +
+  xlab('Income Range (USD)') +
+  coord_flip()
 
 
 #remove not displayed, not employed, and 0 from incomerange to plot
-incomerange_subset <- subset(loandata, IncomeRange != "Not displayed" & IncomeRange != "Not employed" & IncomeRange != "$0")
+incomerange_subset <- subset(loandata, IncomeRange != "Not displayed" & 
+                               IncomeRange != "Not employed" & IncomeRange != "$0")
 
 
 ggplot(data = incomerange_subset, aes(IncomeRange)) +
-  geom_bar(stat = 'count')
+  geom_bar(stat = 'count') +
+  xlab('Income Range (USD)') +
+  coord_flip()
 
 
 ```
@@ -188,7 +204,7 @@ As we can see for the summary, these are the amounts for the Income Range
 variable. The first plot shows all of the income ranges. The second removes
 not displayed, not employeyed, and 0.
 
-```{r echo=FALSE, warning=FALSE, message=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.height=7}
 
 # remove 'other' from loandata dataset and plot
 ggplot(data = subset(loandata, Occupation != 'other'), aes(Occupation)) + 
@@ -213,12 +229,26 @@ loandata$ListingCategory..factor <- factor(loandata$ListingCategory..numeric.)
 
 ggplot(data = loandata, aes(ListingCategory..factor, 
                             fill = factor(ListingCategory..factor,
-                                           labels = c('0 Not Available', '1 Debt Consolidation',
-                                                      '2 Home Improvement', '3 Business', '4 Personal Loan',
-                                                      '5 Student Use', '6 Auto', '7 Other', '8 Baby & Adoption',
-                                                      '9 Boat', '10 Cosmedic Procedure', '11 Engagement Ring',
-                                                      '12 Green Loans', '13 Household Expenses', '14 large Purchases',
-                                                      '15 Medical/Dental', '16 Motorcycle', '17 RV', '18 Taxes', '19 Vacation',
+                                           labels = c('0 Not Available', 
+                                                      '1 Debt Consolidation',
+                                                      '2 Home Improvement',
+                                                      '3 Business',
+                                                      '4 Personal Loan',
+                                                      '5 Student Use',
+                                                      '6 Auto',
+                                                      '7 Other',
+                                                      '8 Baby & Adoption',
+                                                      '9 Boat',
+                                                      '10 Cosmedic Procedure',
+                                                      '11 Engagement Ring',
+                                                      '12 Green Loans',
+                                                      '13 Household Expenses',
+                                                      '14 large Purchases',
+                                                      '15 Medical/Dental',
+                                                      '16 Motorcycle', 
+                                                      '17 RV',
+                                                      '18 Taxes',
+                                                      '19 Vacation',
                                                       '20 Wedding Lons')))) + 
   geom_bar() +
   xlab('Listing Category')
@@ -226,12 +256,14 @@ ggplot(data = loandata, aes(ListingCategory..factor,
 
 
 
-# ggplot(data = loandata, aes(x = AmountDelinquent, color = ListingCategory..factor)) +
+# ggplot(data = loandata, aes(x = AmountDelinquent, 
+#color = ListingCategory..factor)) +
 #   geom_freqpoly() +
 #   scale_y_log10()
 # 
 # 
-# ggplot(data = loandata, aes(x = ListingCategory..factor, y = AmountDelinquent)) +
+# ggplot(data = loandata, aes(x = ListingCategory..factor,
+#y = AmountDelinquent)) +
 #   geom_boxplot() +
 # scale_y_continuous(limits = c(0,90000))
 
@@ -249,14 +281,16 @@ Debt Consolidation is the dominant reason for getting a loan with Prosper.
 summary(loandata$LoanCurrentDaysDelinquent)
 
 
-p1_LoanCurrentDaysDelinquent = ggplot(data = loandata, aes(LoanCurrentDaysDelinquent)) +
+p1_LoanCurrentDaysDelinquent = ggplot(data = loandata,
+                                      aes(LoanCurrentDaysDelinquent)) +
     geom_histogram(binwidth = 1) +
     scale_x_continuous(breaks = seq(0,2704,200), limits = c(0,2704)) +
     scale_y_continuous(breaks = seq(0,400,200), limits = c(0,200))
 
 
 # scale by 10 and limit to 1000 days
-p2_LoanCurrentDaysDelinquent = ggplot(data = loandata, aes(LoanCurrentDaysDelinquent)) +
+p2_LoanCurrentDaysDelinquent = ggplot(data = loandata,
+                                      aes(LoanCurrentDaysDelinquent)) +
     geom_histogram(binwidth = 10, color = 'black', fill = 'blue') +
     scale_x_continuous(breaks = seq(0,1000,100), limits = c(0,1000)) +
     scale_y_continuous(breaks = seq(0,400,200), limits = c(0,200)) +
@@ -279,21 +313,28 @@ summary(loandata$LoanOriginalAmount)
 # look at whole spectrum of loans
 p1_LoanOriginalAmount = ggplot(data = loandata, aes(LoanOriginalAmount)) +
     geom_histogram(color = 'black', fill = 'orange', binwidth = 1000) +
-    scale_x_continuous(breaks = seq(1000,40000, 3000), limits = c(1000,40000))
+    scale_x_continuous(breaks = seq(1000,40000, 3000),
+                       limits = c(1000,40000)) + 
+  xlab('Loan Original Amount (USD)')
 
 # zoom into 25000 to 35000
 p2_LoanOriginalAmount = ggplot(data = loandata, aes(LoanOriginalAmount)) +
     geom_histogram(color = 'black', fill = 'orange') +
-    scale_x_continuous(breaks = seq(25000,35000, 1000), limits = c(25000,35000)) +
-    scale_y_continuous(breaks = seq(0,1000,100), limits = c(0,1000))
+    scale_x_continuous(breaks = seq(25000,35000, 1000),
+                       limits = c(25000,35000)) +
+    scale_y_continuous(breaks = seq(0,1000,100), limits = c(0,1000)) + 
+  xlab('Loan Original Amount (USD)')
 
 # scale by 10
 p3_LoanOriginalAmount = ggplot(data = loandata, aes(LoanOriginalAmount)) +
     geom_histogram(color = 'black', fill = 'orange', binwidth = 1000) +
-    scale_x_continuous(breaks = seq(1000,40000, 3000), limits = c(1000,40000)) +
-    scale_y_log10()
+    scale_x_continuous(breaks = seq(1000,40000, 3000),
+                       limits = c(1000,40000)) +
+    scale_y_log10() + 
+  xlab('Loan Original Amount (USD)')
 
-grid.arrange(p1_LoanOriginalAmount, p2_LoanOriginalAmount, p3_LoanOriginalAmount)
+grid.arrange(p1_LoanOriginalAmount, p2_LoanOriginalAmount,
+             p3_LoanOriginalAmount)
 
 ```
 
@@ -343,7 +384,8 @@ using a histogram. Also, so that it can be summarized with better clarity.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
-cont_var <- select(loandata, LoanCurrentDaysDelinquent, LoanOriginalAmount, AmountDelinquent, DebtToIncomeRatio)
+cont_var <- select(loandata, LoanCurrentDaysDelinquent, LoanOriginalAmount,
+                   AmountDelinquent, DebtToIncomeRatio)
 
 ggpairs(data = cont_var)
 
@@ -363,19 +405,23 @@ cor.test(loandata.filtered$AmountDelinquent, loandata.filtered$DebtToIncomeRatio
 
 
 # plotting scatterplot of Debttoincomeratio vs Amountdelinquent, adding square root layer and summary line
-ggplot(data = subset(loandata.filtered, AmountDelinquent > 0), aes(x = DebtToIncomeRatio, y = AmountDelinquent)) +
+ggplot(data = subset(loandata.filtered, AmountDelinquent > 0),
+       aes(x = DebtToIncomeRatio, y = AmountDelinquent)) +
   geom_jitter(alpha = 6/20, color = 'orange') +
   scale_x_continuous(breaks = seq(0,1.0,0.1), limits = c(0,1.0)) +
   scale_y_continuous(limits = c(0,1e+05), breaks = seq(0,1e+05, 5000)) +
-  geom_line(stat = 'summary', fun.y = mean, alpha = 3/10)
+  geom_line(stat = 'summary', fun.y = mean, alpha = 3/10) +
+  ylab('Amount Delinquent (USD)')
 
 
 # this Amount Delinquent variable should not include 0, let's plot without that
-ggplot(data = subset(loandata, AmountDelinquent > 0), aes(x = DebtToIncomeRatio, y = AmountDelinquent)) +
+ggplot(data = subset(loandata, AmountDelinquent > 0),
+       aes(x = DebtToIncomeRatio, y = AmountDelinquent)) +
   geom_jitter(alpha = 3/20, color = 'blue') +
   xlim(0, quantile(loandata$DebtToIncomeRatio, 0.95,  na.rm = TRUE)) +
   ylim(0, quantile(loandata$AmountDelinquent, 0.95,  na.rm = TRUE)) +
-  geom_smooth(method = 'lm', color = 'orange')
+  geom_smooth(method = 'lm', color = 'orange') +
+  ylab('Amount Delinquent (USD)')
 
 
 
@@ -396,7 +442,8 @@ cor.test(loandata$DebtToIncomeRatio, loandata$LoanCurrentDaysDelinquent)
 
 
 # plot days delinquent vs debttoincomeratio 95% confidence interval 
-ggplot(data = subset(loandata, LoanCurrentDaysDelinquent > 0), aes(x = DebtToIncomeRatio, y = LoanCurrentDaysDelinquent )) +
+ggplot(data = subset(loandata, LoanCurrentDaysDelinquent > 0),
+       aes(x = DebtToIncomeRatio, y = LoanCurrentDaysDelinquent )) +
   geom_jitter(alpha = 4/20, color = 'orange') +
   ylim(0, quantile(loandata$LoanCurrentDaysDelinquent, 0.95, na.rm = TRUE)) +
   xlim(0, quantile(loandata$DebtToIncomeRatio, 0.95, na.rm = TRUE)) 
@@ -409,7 +456,8 @@ by(loandata$AmountDelinquent, loandata$IncomeRange, summary)
 
 
 # add variable to loandata df, to break up days into categories
-#loandata$lcurrdysdel_breaks <- cut(loandata$LoanCurrentDaysDelinquent, breaks = seq(0,1500, 100))
+#loandata$lcurrdysdel_breaks <- cut(loandata$LoanCurrentDaysDelinquent,
+#breaks = seq(0,1500, 100))
 
 #ggplot(data = loandata, aes(x = DebtToIncomeRatio, y = lcurrdysdel_breaks)) +
 #  geom_point()
@@ -418,7 +466,8 @@ by(loandata$AmountDelinquent, loandata$IncomeRange, summary)
 loandata.dir_round <- loandata
 
 # round debto to income ratio to 1/10th.
-loandata.dir_round$DebtToIncomeRatio = round(loandata.dir_round$DebtToIncomeRatio, digits = 1)
+loandata.dir_round$DebtToIncomeRatio = 
+  round(loandata.dir_round$DebtToIncomeRatio, digits = 1)
 
 
 
@@ -434,7 +483,8 @@ loandata.debtavg
 
 
 # this plot shows for every debt to income ratio the average loan current days
-ggplot(data =loandata.debtavg, aes(DebtToIncomeRatio, loancurrentdaysbreaks_mean)) +
+ggplot(data =loandata.debtavg, aes(DebtToIncomeRatio,
+                                   loancurrentdaysbreaks_mean)) +
   geom_line(alpha = 5/10)  +
   scale_x_continuous(breaks = seq(0,1.0,0.1), limits = c(0,1.0)) +
   scale_y_continuous(breaks = seq(0,500,100), limits = c(0,500)) +
@@ -459,16 +509,18 @@ cor.test(loandata$DebtToIncomeRatio, loandata$LoanOriginalAmount)
 ggplot(data = loandata, aes(DebtToIncomeRatio, LoanOriginalAmount)) +
   geom_jitter(alpha = 4/20, color = 'blue') +
   scale_x_continuous(breaks = seq(0,5.0,0.5), limits = c(0,5.0)) +
-  scale_y_continuous(breaks = seq(0,40000,5000))
+  scale_y_continuous(breaks = seq(0,40000,5000)) +
+  ylab('Loan Original Amount (USD)')
 
 ggplot(data = loandata, aes(DebtToIncomeRatio, LoanOriginalAmount)) +
   geom_jitter(alpha = 4/20, color = 'blue') +
   scale_x_continuous(breaks = seq(0,0.7,0.1), limits = c(0,0.7)) +
-  scale_y_continuous(breaks = seq(0,40000,5000))
+  scale_y_continuous(breaks = seq(0,40000,5000))+
+  ylab('Loan Original Amount (USD)')
 ```
+
 For the first plot, it can be seen that the majority of the population is up
 to 1.0.
-
 
 As seen above a plot was made comparing DebtToIncomeRatio to LoanOriginalAmount.
 This was scaled for DebtToIncomeRatio to 0.7 being the maximum. As can be seen
@@ -482,18 +534,25 @@ cor.test(loandata$AmountDelinquent, loandata$LoanCurrentDaysDelinquent)
 
 ggplot(data = loandata, aes(LoanCurrentDaysDelinquent, AmountDelinquent)) +
   geom_point(alpha = 0.1) +
-  scale_y_continuous(breaks = seq(0,10000,2000), limits = c(0,10000)) 
+  scale_y_continuous(breaks = seq(0,10000,2000), limits = c(0,10000)) +
+  ylab('Amount Delinquent (USD)')
 
 
-ggplot(data = subset(loandata, LoanCurrentDaysDelinquent > 0 & AmountDelinquent > 0), aes(LoanCurrentDaysDelinquent, AmountDelinquent)) +
+ggplot(data = subset(loandata, LoanCurrentDaysDelinquent > 0 &
+                       AmountDelinquent > 0), aes(LoanCurrentDaysDelinquent,
+                                                  AmountDelinquent)) +
   geom_point(alpha = 0.3) +
-  scale_y_continuous(breaks = seq(0,10000,2000), limits = c(0,10000))
+  scale_y_continuous(breaks = seq(0,10000,2000), limits = c(0,10000))+
+  ylab('Amount Delinquent (USD)')
 
 
 # create boxplot of days delinquent vs amountdelinquent
-ggplot(data = subset(loandata, LoanCurrentDaysDelinquent > 0 & AmountDelinquent > 0), aes(LoanCurrentDaysDelinquent, AmountDelinquent)) +
+ggplot(data = subset(loandata, LoanCurrentDaysDelinquent > 0 &
+                       AmountDelinquent > 0), aes(LoanCurrentDaysDelinquent,
+                                                  AmountDelinquent)) +
   geom_boxplot() +
-  scale_y_continuous(breaks = seq(0,10000,500), limits = c(0,10000))
+  scale_y_continuous(breaks = seq(0,10000,500), limits = c(0,10000))+
+  ylab('Amount Delinquent (USD)')
 
 ```
 
@@ -532,11 +591,19 @@ relationship found and most clear found.
 ```{r echo=FALSE, Multivariate_Plots, warning=FALSE, message=FALSE}
 
 # Select highest occupationloanamounts
-loandata.Occ_red <- filter(loandata, Occupation %in% c("Commision", "Pharmacist", "Bus Driver", "Civil Service",
-                                   "Engineer - Electrical", "Investor", "Flight Attendant",
-                                   "College Freshman", "Tradesman - Carpenter", "Tradesman - Plumber"))
+loandata.Occ_red <- filter(loandata, Occupation %in% c("Commision",
+                                                       "Pharmacist",
+                                                       "Bus Driver",
+                                                       "Civil Service",
+                                                       "Engineer - Electrical",
+                                                       "Investor",
+                                                       "Flight Attendant",
+                                                       "College Freshman",
+                                                       "Tradesman - Carpenter",
+                                                       "Tradesman - Plumber"))
 
-#loandata.Occ_red$DebtToIncomeRatio = round(loandata.Occ_red$DebtToIncomeRatio, digits = 1)
+#loandata.Occ_red$DebtToIncomeRatio = round(loandata.Occ_red$DebtToIncomeRatio,
+#digits = 1)
 
 
 
@@ -557,30 +624,40 @@ loandata.dir_round <- loandata.Occ_red %>%
 
 
 # look at the relationships between occupations
-ggplot(data = loandata.Occ_red, aes(DebtToIncomeRatio, y = AmountDelinquent, color = Occupation)) +
+ggplot(data = loandata.Occ_red, aes(DebtToIncomeRatio, y = AmountDelinquent,
+                                    color = Occupation)) +
   geom_jitter(alpha = 6/10) +
   scale_y_continuous(breaks = seq(0,100000,50000), limits = c(0,100000)) +
   scale_x_continuous(breaks = seq(0,0.7,0.1), limits = c(0,0.7)) +
-  scale_y_log10()
+  scale_y_log10() +
+  ylab('Amount Delinquent (USD)')
 
 # run a scatterplot for the average amount delinquent per occupation
-ggplot(data = loandata.Occ_red, aes(x = DebtToIncomeRatio, y = AmountDelinquent, color = Occupation)) +
+ggplot(data = loandata.Occ_red, aes(x = DebtToIncomeRatio,
+                                    y = AmountDelinquent, color = Occupation)) +
   geom_jitter() +
   scale_y_continuous(breaks = seq(0,5000, 500), limits = c(0,5000)) +
   scale_x_continuous(breaks = seq(0,1,.1), limits = c(0,1.0)) +
-  scale_y_log10()
+  scale_y_log10() +
+  ylab('Amount Delinquent (USD)')
 
 # create line plot to show averages accross occupations for amount delinquent
-ggplot(data = loandata.dir_round, aes(x = DebtToIncomeRatio, y = amountdel_mean, color = Occupation)) +
+ggplot(data = loandata.dir_round, aes(x = DebtToIncomeRatio,
+                                      y = amountdel_mean,
+                                      color = Occupation)) +
   geom_line() +
-  scale_x_continuous(breaks = seq(0,.7,.1), limits = c(0,.7)) 
+  scale_x_continuous(breaks = seq(0,.7,.1), limits = c(0,.7))  +
+  ylab('Amount Delinquent Mean (USD)')
 
 # create square scale to see y axis closer
-ggplot(data = loandata.dir_round, aes(x = DebtToIncomeRatio, y = amountdel_mean, color = Occupation)) +
+ggplot(data = loandata.dir_round, aes(x = DebtToIncomeRatio,
+                                      y = amountdel_mean,
+                                      color = Occupation)) +
   geom_line() +
   scale_x_continuous(breaks = seq(0,.7,.1), limits = c(0,.7)) +
   coord_trans(y = "sqrt") +
-  scale_color_brewer()
+  scale_color_brewer() +
+  ylab('Amount Delinquent Mean (USD)')
 
 ```
 
@@ -597,8 +674,13 @@ drivers has some high spikes for amount delinquent.
 by(loandata$AmountDelinquent, loandata$ListingCategory..factor, summary)
 
 #reduce dataset to main highest loan reasons
-loandata.ListingCat_red <- filter(loandata, ListingCategory..factor %in% c("1","6","10",
-                                                                           "13","15","16"))
+loandata.ListingCat_red <- filter(loandata,
+                                  ListingCategory..factor %in% c("1",
+                                                                 "6",
+                                                                 "10",
+                                                                "13",
+                                                                "15",
+                                                                "16"))
 # get averages for debttoincomeratio and Listing category
 groupings_debt_listing <- loandata.ListingCat_red %>%
   filter(!is.na(AmountDelinquent)) %>%
@@ -613,23 +695,41 @@ ggplot(data = subset(groupings_debt_listing, amountdel_mean > 0), aes(x = amount
   geom_point() +
   scale_x_continuous(breaks = seq(0,1000,100), limits = c(0,1000)) +
   scale_y_continuous(breaks = seq(0,1.0,0.1), limits = c(0,1.0)) +
-  scale_color_discrete(labels = c("1 - Debt Consolidation", "6 - Auto", "10 - Cosmetic Procedure",
-                                             "13 - Household Expenses", "15 - Medical/Dental", "16 - Motorcycle"))
+  scale_color_discrete(labels = c("1 - Debt Consolidation", "6 - Auto",
+                                  "10 - Cosmetic Procedure",
+                                  "13 - Household Expenses",
+                                  "15 - Medical/Dental",
+                                  "16 - Motorcycle")) +
+  xlab('Amount Delinquent Mean (USD)')
 
 
-ggplot(data = groupings_debt_listing, aes(x = DebtToIncomeRatio, y = amountdel_mean, color = ListingCategory..factor)) +
+ggplot(data = groupings_debt_listing,
+       aes(x = DebtToIncomeRatio,
+      y = amountdel_mean, color = ListingCategory..factor)) +
   geom_line() +
   scale_x_continuous(breaks = seq(0,1.0,.1), limits = c(0,1.0)) +
-  scale_color_discrete(labels = c("1 - Debt Consolidation", "6 - Auto", "10 - Cosmetic Procedure",
-                                             "13 - Household Expenses", "15 - Medical/Dental", "16 - Motorcycle"))
+  scale_color_discrete(labels = c("1 - Debt Consolidation",
+                                  "6 - Auto",
+                                  "10 - Cosmetic Procedure",
+                                  "13 - Household Expenses",
+                                  "15 - Medical/Dental",
+                                  "16 - Motorcycle")) +
+  ylab('Amount Delinquent Mean (USD)')
 
 # scale y axis to see closer
-ggplot(data = groupings_debt_listing, aes(x = DebtToIncomeRatio, y = amountdel_mean, color = ListingCategory..factor)) +
+ggplot(data = groupings_debt_listing, aes(x = DebtToIncomeRatio,
+                                          y = amountdel_mean,
+                                          color = ListingCategory..factor)) +
   geom_line() +
   scale_x_continuous(breaks = seq(0,1.0,.1), limits = c(0,1.0)) +
   coord_trans(y = "sqrt") +
-  scale_color_brewer(palette = 4, labels = c("1 - Debt Consolidation", "6 - Auto", "10 - Cosmetic Procedure",
-                                             "13 - Household Expenses", "15 - Medical/Dental", "16 - Motorcycle"))
+  scale_color_brewer(palette = 4, labels = c("1 - Debt Consolidation",
+                                             "6 - Auto",
+                                             "10 - Cosmetic Procedure",
+                                             "13 - Household Expenses",
+                                             "15 - Medical/Dental",
+                                             "16 - Motorcycle")) +
+  ylab('Amount Delinquent Mean (USD)')
 
 ```
 
@@ -669,13 +769,16 @@ of persons who are in a delinquent status.
 ### Plot One
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_One}
 
-# plotting scatterplot of Debttoincomeratio vs Amountdelinquent, adding square root layer and summary line
-ggplot(data = subset(loandata.filtered, AmountDelinquent > 0), aes(x = DebtToIncomeRatio, y = AmountDelinquent)) +
+# plotting scatterplot of Debttoincomeratio vs Amountdelinquent,
+# adding square root layer and summary line
+ggplot(data = subset(loandata.filtered, AmountDelinquent > 0),
+       aes(x = DebtToIncomeRatio, y = AmountDelinquent)) +
   geom_jitter(alpha = 6/20, color = 'orange') +
   scale_x_continuous(breaks = seq(0,1.0,0.1), limits = c(0,1.0)) +
   scale_y_continuous(limits = c(0,1e+05), breaks = seq(0,1e+05, 5000)) +
   geom_line(stat = 'summary', fun.y = mean, alpha = 3/10) +
-  ggtitle('Amount Delinquent per Debt to Income Ratio')
+  ggtitle('Amount Delinquent per Debt to Income Ratio') +
+  ylab('Amount Delinquent(USD)')
 
 
 ```
@@ -690,7 +793,8 @@ really bad ratio owe less, its probably because they borrowed less.
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_Two}
 
 # this plot shows for every debt to income ratio the average loan current days
-ggplot(data =loandata.debtavg, aes(DebtToIncomeRatio, loancurrentdaysbreaks_mean)) +
+ggplot(data =loandata.debtavg, aes(DebtToIncomeRatio,
+                                   loancurrentdaysbreaks_mean)) +
   geom_line(alpha = 5/10)  +
   scale_x_continuous(breaks = seq(0,1.0,0.1), limits = c(0,1.0)) +
   scale_y_continuous(breaks = seq(0,500,100), limits = c(0,500)) +
@@ -708,12 +812,14 @@ a worse reputatio more likely would have more days delinquent.
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_Three}
 
 # create line plot to show averages accross occupations for amount delinquent
-ggplot(data = loandata.dir_round, aes(x = DebtToIncomeRatio, y = amountdel_mean, color = Occupation)) +
+ggplot(data = loandata.dir_round, aes(x = DebtToIncomeRatio,
+                                      y = amountdel_mean,
+                                      color = Occupation)) +
   geom_line() +
   scale_x_continuous(breaks = seq(0,.7,.1), limits = c(0,.7)) +
   scale_y_continuous(breaks = seq(0,60000,10000)) +
-  ggtitle('Amount Delinquent by Debt to Income Ratio by different Occupations') +
-  ylab('Amount Delinquent Mean') +
+  ggtitle('Amount Delinquent by Debt to Income Ratio by Occupations') +
+  ylab('Amount Delinquent Mean (USD)') +
   xlab('Debt To Income Ratio') 
 
 ```
@@ -724,6 +830,8 @@ plumber has some high amounts owed as the ratio goes higher while Pharmacists
 and Investors owe less as the ratio's are higher.
 ------
 
+## Reflections
+
 The Prosper Loan dataset contains 81 variables with 113,937 observations. I 
 began by exploring the individual variables such as Debt to Income Ratio and
 Amount Delinquent. A lot of reductions had to be made to variables like 
@@ -731,3 +839,7 @@ Occupation because there were many Occupations found within the dataset.
 
 One trend found was Amount Delinquent and Debt To Income Ratio in that the 
 higher the Debt To Income Ratio the less Amounts were Delinquent.
+
+In the future, it would be great to explore the time that a person has to
+pay back their loan compared with their loan status to determine if these
+times are feasible or not.
