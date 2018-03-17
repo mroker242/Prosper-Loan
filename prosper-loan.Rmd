@@ -189,7 +189,8 @@ ggplot(data = loandata, aes(IncomeRange)) +
 
 #remove not displayed, not employed, and 0 from incomerange to plot
 incomerange_subset <- subset(loandata, IncomeRange != "Not displayed" & 
-                               IncomeRange != "Not employed" & IncomeRange != "$0")
+                               IncomeRange != "Not employed" &
+                               IncomeRange != "$0")
 
 
 ggplot(data = incomerange_subset, aes(IncomeRange)) +
@@ -398,13 +399,16 @@ some of the correlations.
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 # filtering loandata to remove NA's and 0 from Amount Delinquent
-loandata.filtered <- loandata %>% filter(!is.na(AmountDelinquent)) %>% filter(!is.na(DebtToIncomeRatio)) %>%
+loandata.filtered <- loandata %>% filter(!is.na(AmountDelinquent)) %>%
+  filter(!is.na(DebtToIncomeRatio)) %>%
   filter(AmountDelinquent > 0)
 
-cor.test(loandata.filtered$AmountDelinquent, loandata.filtered$DebtToIncomeRatio)
+cor.test(loandata.filtered$AmountDelinquent,
+         loandata.filtered$DebtToIncomeRatio)
 
 
-# plotting scatterplot of Debttoincomeratio vs Amountdelinquent, adding square root layer and summary line
+# plotting scatterplot of Debttoincomeratio vs Amountdelinquent,
+# adding square root layer and summary line
 ggplot(data = subset(loandata.filtered, AmountDelinquent > 0),
        aes(x = DebtToIncomeRatio, y = AmountDelinquent)) +
   geom_jitter(alpha = 6/20, color = 'orange') +
@@ -618,7 +622,8 @@ loandata.dir_round <- loandata.Occ_red %>%
   ungroup() %>%
   arrange(DebtToIncomeRatio)
 
-#loandata.dir_round$DebtToIncomeRatio = round(loandata.dir_round$DebtToIncomeRatio, digits = 1)
+#loandata.dir_round$DebtToIncomeRatio =
+#round(loandata.dir_round$DebtToIncomeRatio, digits = 1)
 
 
 
@@ -691,7 +696,9 @@ groupings_debt_listing <- loandata.ListingCat_red %>%
   arrange(DebtToIncomeRatio)
 
 
-ggplot(data = subset(groupings_debt_listing, amountdel_mean > 0), aes(x = amountdel_mean, y = DebtToIncomeRatio, color = ListingCategory..factor)) +
+ggplot(data = subset(groupings_debt_listing, amountdel_mean > 0),
+       aes(x = amountdel_mean, y = DebtToIncomeRatio,
+           color = ListingCategory..factor)) +
   geom_point() +
   scale_x_continuous(breaks = seq(0,1000,100), limits = c(0,1000)) +
   scale_y_continuous(breaks = seq(0,1.0,0.1), limits = c(0,1.0)) +
